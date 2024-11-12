@@ -4,32 +4,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
     <title>Att göra-applikationen</title>
 </head>
 
 <body>
     <div class="container">
-        <h2>Att göra-applikationen</h2>
-        <p>
-            <input id="new-task" type="text" placeholder="din syssla"><button>Lägg till</button>
-        </p>
+        <div class="container__header">
+            <div class="container__header--title">
+                <h4>Att göra-applikationen.exe</h4>
+            </div>
+            <div class="container__header--buttons">
+                <div class="minimize"></div>
+                <div class="adjust"></div>
+                <div class="close">
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div class="content">
+<div id="list-form">
+    <input id="new-task" type="text" placeholder="din syssla">
+    <button id="add-button" class="form-botton">Lägg till</button>
+    <button id="clear-button">Återställ</button>
+</div>
 
-        <h3>Att göra</h3>
-        <ul id="incomplete-tasks">
-            <li><input type="checkbox"><label>Syssla1</label><input type="text"><button
-                    class="edit">Ändra</button><button class="delete">Radera</button></li>
-            <li><input type="checkbox"><label>Syssla2</label><input type="text" value="Go Shopping"><button
-                    class="edit">Ändra</button><button class="delete">Radera</button></li>
-            <li><input type="checkbox"><label>Syssla3</label><input type="text" value="Go Shopping"><button
-                    class="edit">Ändra</button><button class="delete">Radera</button></li>
-        </ul>
+            <h3>Att göra</h3>
+            <ul id="incomplete-tasks" class="content--list">
 
-        <h3>Färdiga</h3>
-        <ul id="completed-tasks">
-            <li><input type="checkbox" checked><label>See the Doctor</label><input type="text"><button
-                    class="edit">Ändra</button><button class="delete">Radera</button></li>
-        </ul>
+                    <li>
+
+                            <input type="checkbox">
+                            <label>Syssla1</label>
+                            <button class="edit">Ändra</button>
+                            <button class="delete">Radera</button>
+                        
+
+                    </li>
+
+
+                <li><input type="checkbox"><label>Syssla2</label><button class="edit">Ändra</button><button
+                        class="delete">Radera</button></li>
+                <li><input type="checkbox"><label>Syssla3</label><button class="edit">Ändra</button><button
+                        class="delete">Radera</button></li>
+            </ul>
+
+            <h3>Färdiga</h3>
+            <ul id="completed-tasks" class="content--list">
+                <li>
+                    <input type="checkbox" checked>
+                    <label>Syssla4</label>
+                    <button class="edit">Ändra</button>
+                    <button class="delete">Radera</button>
+                </li>
+            </ul>
+
+
+        </div>
     </div>
+    <script src="scripts.js"></script>
 </body>
 
 </html>

@@ -1,0 +1,275 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --almost-white: #faf3f9;
+    --pink-color: #f2afb2;
+    --light-pink-color: #eec7cb;
+    --boder-color: #5a3147;
+    --pink-boder-color: #be8b90;
+    --text-color: #4d3543;
+}
+
+body {
+    box-sizing: border-box;
+    background-image: url('bg_pink.png');
+    background-repeat: repeat;
+    color: var(--text-color);
+    font-family: 'VT323', monospace;
+    font-weight: 400;
+    font-style: normal;
+    margin-top: 30px;
+}
+
+.container {
+    position: relative;
+    background-color: var(--almost-white);
+    border: 5px solid var(--boder-color);
+    border-radius: 16px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    width: 70%;
+    min-height:80%;
+     max-height: 80vh; /* Set a maximum height to trigger scrolling */
+    overflow: hidden; /* Prevents the entire container from scrolling */
+
+}
+/* Custom scrollbar styling */
+.container::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+}
+
+.container::-webkit-scrollbar-track {
+    background: var(--almost-white); /* Background color of the scrollbar track */
+    border-radius: 10px;
+}
+
+.container::-webkit-scrollbar-thumb {
+    background-color: var(--pink-color); /* Scrollbar thumb color */
+    border-radius: 10px;
+    border: 2px solid var(--almost-white); /* Adds space around the scrollbar thumb */
+}
+
+.container::-webkit-scrollbar-thumb:hover {
+    background-color: var(--pink-boder-color); /* Thumb color on hover */
+}
+
+/* Optional: Customize scrollbar for Firefox */
+.container {
+    scrollbar-width: thin;
+    scrollbar-color: var(--pink-color) var(--almost-white);
+}
+
+
+
+
+
+.container__header {
+    background-color: var(--pink-color);
+    display: flex;
+    flex-direction: row;
+    height: 30px;
+    border-radius: 9px 9px 0 0;
+    border-bottom: 4px solid var(--pink-boder-color);
+    position: relative;
+    padding: 3px 18px 3px;
+    justify-content: space-between;
+    align-items: center;
+     top: 0; /* Keeps header fixed at the top */
+    z-index: 1; /* Ensures header is on top of the content */
+}
+.container__header--title {
+    font-size: 18px;
+    letter-spacing: 1px;
+}
+.container__header--buttons {
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    justify-content: flex-end;
+}
+.container__header--buttons div {
+    display: flex;
+    align-items: center;
+    min-height: 2px;
+    width: 14px;
+}
+.container__header--buttons div:nth-child(1) {
+    border-bottom: 3px solid var(--boder-color);
+    height: 2px;
+    width: 15px;
+}
+.container__header--buttons div:nth-child(2) {
+    border: 3px solid var(--boder-color);
+    border-top-width: 5px;
+    height: 10px;
+}
+.container__header--buttons div:nth-child(3) {
+    display: flex;
+    justify-content: normal;
+}
+.container__header--buttons div:nth-child(3) span {
+    height: 16px;
+    border: 2px solid var(--boder-color);
+    background: var(--boder-color);
+}
+.container__header--buttons div:nth-child(3) span:nth-child(1) {
+    margin-left: 7px;
+    transform: rotate(45deg);
+}
+.container__header--buttons div:nth-child(3) span:nth-child(2) {
+    margin-right: 7px;
+    transform: rotate(-45deg);
+    position: relative;
+    left: -4px;
+}
+.content {
+     overflow-y: auto; /* Allows scrolling within this content area */
+    max-height: calc(80vh - 50px); /* Adjusts height to allow scrolling while accounting for header height */
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 410px;
+}
+
+
+/* Styles for the h3 headings */
+h3 {
+    font-size: 24px;
+    color: var(--text-color);
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 15px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+.content--list {
+    margin: 30px 25px 0;
+    font-size: 22px;
+    letter-spacing: 1px;
+    list-style: none;
+}
+
+.content--list li {
+   display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 7px 0;
+    border-bottom: 1px dashed var(--text-color);
+}
+
+.content--list input[type='checkbox'] {
+   appearance: none;
+    width: 20px;
+    height: 20px;
+    margin: 0 10px 0 0;
+    border: 2px solid var(--pink-boder-color);
+    border-radius: 4px;
+    background-color: var(--almost-white);
+    cursor: pointer;
+    position: relative;
+    transition: background-color 0.3s ease;
+
+}
+.content--list input[type="checkbox"]:checked {
+    background-color: var(--pink-color);
+    border-color: var(--boder-color);
+}
+
+.content--list input[type="checkbox"]:checked::before {
+    content: "✓";
+    color: var(--almost-white);
+    font-weight: bold;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+
+/* Style for the label */
+.content--list label {
+    flex: 1;
+    font-size: 18px;
+    color: var(--text-color);
+    padding-left: 5px;
+    cursor: pointer;
+}
+
+/* Button styling within list items */
+.content--list button {
+    background-color: var(--light-pink-color);
+    color: var(--boder-color);
+    border: 2px solid var(--pink-boder-color);
+    border-radius: 4px;
+    font-size: 16px;
+    padding: 4px 10px;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.content--list button:hover {
+    background-color: var(--pink-boder-color);
+    color: var(--almost-white);
+}
+
+
+
+.content--list div button {
+    margin-left: auto;
+    padding: 5px 10px;
+}
+.container #list-form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 30px;
+    width: 85%;
+    padding: 0 30px;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+.container button {
+    color: var(--boder-color);
+    background-color: var(--light-pink-color);
+    border-radius: 5px;
+    border: 4px solid var(--pink-boder-color);
+    font-size: 20px;
+    font-family: 'VT323', monospace;
+    font-weight: 400;
+    font-style: normal;
+    padding: 7px 20px;
+    margin-top:7px ;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.container button:hover {
+    background-color: var(--pink-boder-color);
+    color: var(--light-pink-color);
+    transition: 0.3s;
+}
+.container input {
+    background-color: transparent;
+    border: none;
+    border: 3px solid var(--text-color);
+    border-radius: 5px;
+    min-height: 30px;
+    margin: 15px 0;
+    padding: 0 10px;
+    font-family: 'VT323', monospace;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 20px;
+}
