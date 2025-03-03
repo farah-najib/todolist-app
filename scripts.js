@@ -1,124 +1,158 @@
-var taskInput = document.getElementById('new-task')
-var addButton = document.getElementById('add-button')
-var clearButton = document.getElementById('clear-button')
-var incompleteTasks = document.getElementById('incomplete-tasks')
-var completedTasks = document.getElementById('completed-tasks')
-var createNewTaskElement = function (taskString) {
-    var listItem = document.createElement('li')
-    var checkBtn = document.createElement('input')
-    var label = document.createElement('label')
-    var editButton = document.createElement('button')
-    var deleteButton = document.createElement('button')
-
-    checkBtn.type = 'checkbox'
-    editButton.innerText = 'Edit'
-    editButton.className = 'edit'
-    deleteButton.innerText = 'Delete'
-    deleteButton.className = 'delete'
-    label.innerText = taskString
-    listItem.appendChild(checkBtn)
-    listItem.appendChild(label)
-    listItem.appendChild(editButton)
-    listItem.appendChild(deleteButton)
-
-    checkBtn.addEventListener('change', function () {
-        if (checkBtn.checked) {
-            completedTasks.appendChild(listItem)
-            editButton.style.display = 'none'
-        } else {
-            incompleteTasks.appendChild(listItem)
-            editButton.style.display = 'inline'
-        }
-    })
-
-    deleteButton.addEventListener('click', function () {
-        listItem.parentNode.removeChild(listItem)
-    })
-   editButton.addEventListener('click', function () {
-       var originalText = label.textContent // Save the original text of the task
-       label.contentEditable = true
-       label.focus()
-
-
-       var handleBlur = function () {
-           if (label.textContent.trim() === '') {
-               alert('Task cannot be empty!')
-               label.textContent = originalText // Reset to original value if empty
-           }
-           label.contentEditable = false
-           label.removeEventListener('blur', handleBlur) // Remove the event listener after it's triggered
-       }
-
-       // Attach the blur event listener
-       label.addEventListener('blur', handleBlur)
-   })
-    return listItem
-}
-
-var addTask = function () {
-    console.log('Add task...')
-    if (taskInput.value == '') {
-        alert('please add Some Text')
-    } else {
-        var listItem = createNewTaskElement(taskInput.value)
-        incompleteTasks.appendChild(listItem)
-        taskInput.value = ''
+class Task {
+    constructor(taskText) {
+        this.taskText = taskText
+        this.listItem = this.createTaskElement()
     }
-}
 
+    createTaskElement() {
+        const listItem = document.createElement('li')
+        const checkBtn = document.createElement('input')
+        const label = document.createElement('label')
+        const editButton = document.createElement('button')
+        const deleteButton = document.createElement('button')
 
-addButton.addEventListener('click', addTask)
-clearButton.addEventListener('click', function () {
-    incompleteTasks.innerHTML = ''
-    completedTasks.innerHTML = ''
-})
+        checkBtn.type = 'checkbox'
+        editButton.innerText = 'Ändra'
+        editButton.className = 'edit'
+        deleteButton.innerText = 'Radera'
+        deleteButton.className = 'delete'
+        label.innerText = this.taskText
 
+        listItem.appendChild(checkBtn)
+        listItem.appendChild(label)
+        listItem.appendChild(editButton)
+        listItem.appendChild(deleteButton)
 
-// Apply edit and delete functionality to pre-existing tasks in the HTML
-document.querySelectorAll('#incomplete-tasks .edit, #completed-tasks .edit').forEach(function (button) {
-    button.addEventListener('click', function () {
-        var label = this.previousElementSibling;
-        var originalText = label.textContent; // Save the original text before editing
-        label.contentEditable = true;
-        label.focus();
+        this.addEventListeners(
+            listItem,
+            checkBtn,
+            editButton,
+            deleteButton,
+            label
+        )
 
-        // Listen for blur event (when user clicks away)
-        label.addEventListener('blur', function () {
-            if (label.textContent.trim() === '') {
-                alert('Task cannot be empty!');
-                label.textContent = originalText; // Reset to original value if empty
+        return listItem
+    }
+
+    addEventListeners(listItem, checkBtn, editButton, deleteButton, label) {
+        checkBtn.addEventListener('change', () => {
+            if (checkBtn.checked) {
+                TaskManager.completedTasks.appendChild(listItem)
+                editButton.style.display = 'none'
+            } else {
+                TaskManager.incompleteTasks.appendChild(listItem)
+                editButton.style.display = 'inline'
             }
-            label.contentEditable = false;
-        });
-    });
-});
+        })
 
-// Apply delete functionality to pre-existing tasks
-document.querySelectorAll('#incomplete-tasks .delete, #completed-tasks .delete').forEach(function (button) {
-    button.addEventListener('click', function () {
-        this.parentElement.remove();
-    });
-});
+        deleteButton.addEventListener('click', () => listItem.remove())
 
-// Apply checkbox functionality to pre-existing tasks
-document.querySelectorAll('#incomplete-tasks input[type="checkbox"], #completed-tasks input[type="checkbox"]').forEach(function (checkbox) {
-    checkbox.addEventListener('change', function () {
-        var listItem = this.parentElement;
-        if (this.checked) {
-            completedTasks.appendChild(listItem);
-            listItem.querySelector('.edit').style.display = 'none';
-        } else {
-            incompleteTasks.appendChild(listItem);
-            listItem.querySelector('.edit').style.display = 'inline';
-        }
-    });
+        editButton.addEventListener('click', () => {
+            const originalText = label.textContent
+            label.contentEditable = true
+            label.focus()
 
-    // Set initial state based on whether the checkbox is checked
-    if (checkbox.checked) {
-        completedTasks.appendChild(checkbox.parentElement);
-        checkbox.parentElement.querySelector('.edit').style.display = 'none';
-    } else {
-        incompleteTasks.appendChild(checkbox.parentElement);
-        checkbox.parentElement.querySelector('.edit').style.display = 'inline';
+            label.addEventListener('blur', function handleBlur() {
+                if (label.textContent.trim() === '') {
+                    TaskManager.displayError('Task cannot be empty!')
+                    label.textContent = originalText
+                }
+                label.contentEditable = false
+                label.removeEventListener('blur', handleBlur)
+            })
+        })
     }
-});
+}
+
+class TaskManager {
+    static taskInput = document.getElementById('new-task')
+    static addButton = document.getElementById('add-button')
+    static clearButton = document.getElementById('clear-button')
+    static incompleteTasks = document.getElementById('incomplete-tasks')
+    static completedTasks = document.getElementById('completed-tasks')
+    static errorDisplay = document.getElementById('error-message')
+
+    static addTask() {
+        const taskText = TaskManager.taskInput.value.trim()
+        if (!taskText) {
+            TaskManager.displayError('Please enter a task!')
+            return
+        }
+
+        const task = new Task(taskText)
+        TaskManager.incompleteTasks.appendChild(task.listItem)
+        TaskManager.taskInput.value = ''
+        TaskManager.clearError()
+    }
+
+    static clearTasks() {
+        TaskManager.incompleteTasks.innerHTML = ''
+        TaskManager.completedTasks.innerHTML = ''
+    }
+
+    static displayError(message) {
+        TaskManager.errorDisplay.innerText = message
+        TaskManager.errorDisplay.style.display = 'block'
+    }
+
+    static clearError() {
+        TaskManager.errorDisplay.style.display = 'none'
+    }
+
+    static initialize() {
+       
+        document
+            .querySelectorAll('#incomplete-tasks li')
+            .forEach((listItem) => {
+                TaskManager.attachTaskEvents(listItem, false)
+            })
+
+
+        document.querySelectorAll('#completed-tasks li').forEach((listItem) => {
+            TaskManager.attachTaskEvents(listItem, true)
+        })
+    }
+
+    static attachTaskEvents(listItem, isCompleted) {
+        const checkBtn = listItem.querySelector('input[type="checkbox"]')
+        const editButton = listItem.querySelector('.edit')
+        const deleteButton = listItem.querySelector('.delete')
+        const label = listItem.querySelector('label')
+
+        if (isCompleted) {
+            editButton.style.display = 'none'
+        }
+
+        checkBtn.addEventListener('change', () => {
+            if (checkBtn.checked) {
+                TaskManager.completedTasks.appendChild(listItem)
+                editButton.style.display = 'none'
+            } else {
+                TaskManager.incompleteTasks.appendChild(listItem)
+                editButton.style.display = 'inline'
+            }
+        })
+
+        deleteButton.addEventListener('click', () => listItem.remove())
+
+        editButton.addEventListener('click', () => {
+            const originalText = label.textContent
+            label.contentEditable = true
+            label.focus()
+
+            label.addEventListener('blur', function handleBlur() {
+                if (label.textContent.trim() === '') {
+                    TaskManager.displayError('Task cannot be empty!')
+                    label.textContent = originalText
+                }
+                label.contentEditable = false
+                label.removeEventListener('blur', handleBlur)
+            })
+        })
+    }
+}
+
+
+TaskManager.addButton.addEventListener('click', TaskManager.addTask)
+TaskManager.clearButton.addEventListener('click', TaskManager.clearTasks)
+document.addEventListener('DOMContentLoaded', TaskManager.initialize)
